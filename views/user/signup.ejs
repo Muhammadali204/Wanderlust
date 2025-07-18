@@ -1,0 +1,141 @@
+<%- layout("layouts/boilerplate") %>
+
+<style>
+  body {
+    background-color: #fff; /* Black background */
+    color: #fff; /* White text */
+  }
+
+  .form-container {
+    background: #111; /* Slightly lighter black */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    width: 100%;
+    max-width: 450px;
+    margin: 50px auto;
+  }
+
+  .form-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .form-label {
+    color: #ccc;
+  }
+
+  .form-control {
+    border-radius: 8px;
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #555;
+  }
+
+  .form-control::placeholder {
+    color: #aaa;
+  }
+
+  .form-control:focus {
+    background-color: #222;
+    color: #fff;
+    border-color: #fff;
+    box-shadow: none;
+  }
+
+  .btn-custom {
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 1.1rem;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .btn-custom:hover {
+    background-color: #ccc;
+    color: #000;
+  }
+
+  .invalid-feedback {
+    color: #f8d7da;
+  }
+</style>
+
+<div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="form-container">
+    <h1 class="form-title text-center">Signup on Wanderlust</h1>
+    <form
+      action="/signup"
+      method="post"
+      class="needs-validation"
+      novalidate
+      id="signupForm"
+    >
+      <!-- Email -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          placeholder="Enter Email"
+          name="email"
+          id="email"
+          required
+        />
+        <div class="invalid-feedback">Please enter a valid email.</div>
+      </div>
+
+      <!-- Username -->
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Enter Username"
+          name="username"
+          id="username"
+          required
+        />
+        <div class="invalid-feedback">Username is required.</div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          placeholder="Enter Password"
+          name="password"
+          id="password"
+          required
+        />
+        <div class="invalid-feedback">Password is required.</div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-custom w-100">Signup</button>
+    </form>
+  </div>
+</div>
+
+<!-- Bootstrap Validation Script -->
+<script>
+  (function () {
+    "use strict";
+    let form = document.querySelector("#signupForm");
+
+    form.addEventListener("submit", function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      form.classList.add("was-validated");
+    });
+  })();
+</script>

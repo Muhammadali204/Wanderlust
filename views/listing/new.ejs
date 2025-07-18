@@ -1,0 +1,183 @@
+<%- layout("layouts/boilerplate") %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow p-4">
+        <h2 class="text-center mb-4">Create a New Listing</h2>
+        <form
+          action="/listings"
+          method="POST"
+          enctype="multipart/form-data"
+          id="listingForm"
+          novalidate
+        >
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input
+              type="text"
+              class="form-control"
+              name="listing[title]"
+              id="title"
+              placeholder="Enter title"
+              required
+            />
+            <div class="form-text text-danger" id="titleError"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input
+              type="text"
+              class="form-control"
+              name="listing[description]"
+              id="description"
+              placeholder="Enter description"
+              required
+            />
+            <div class="form-text text-danger" id="descriptionError"></div>
+          </div>
+          <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" name="category" id="category" required>
+              <option value="" selected disabled>Select a category</option>
+              <option value="Home">Home</option>
+              <option value="Beach">Beach</option>
+              <option value="City">City</option>
+              <option value="Mountains">Mountains</option>
+              <option value="Forest">Forest</option>
+              <option value="Winter">Winter</option>
+              <option value="Hotel">Hotel</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="imageUrl" class="form-label">Upload Image</label>
+            <input
+              type="file"
+              class="form-control"
+              name="listing[image]"
+              id="imageUrl"
+              required
+            />
+            <div class="form-text text-danger" id="imageUrlError"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input
+              type="number"
+              class="form-control"
+              name="listing[price]"
+              id="price"
+              placeholder="Enter price"
+              required
+            />
+            <div class="form-text text-danger" id="priceError"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input
+              type="text"
+              class="form-control"
+              name="listing[location]"
+              id="location"
+              placeholder="Enter location"
+              required
+            />
+            <div class="form-text text-danger" id="locationError"></div>
+          </div>
+
+          <div class="mb-3">
+            <label for="country" class="form-label">Country</label>
+            <input
+              type="text"
+              class="form-control"
+              name="listing[country]"
+              id="country"
+              placeholder="Enter country"
+              required
+            />
+            <div class="form-text text-danger" id="countryError"></div>
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-dark">Create Listing</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document
+    .getElementById("listingForm")
+    .addEventListener("submit", function (event) {
+      let isValid = true;
+
+      document
+        .querySelectorAll(".form-text")
+        .forEach((el) => (el.textContent = ""));
+      document
+        .querySelectorAll(".form-control")
+        .forEach((el) => el.classList.remove("is-invalid", "is-valid"));
+
+      function validateInput(id, condition, errorMessage) {
+        const input = document.getElementById(id);
+        const errorElement = document.getElementById(id + "Error");
+
+        if (!condition) {
+          errorElement.textContent = errorMessage;
+          input.classList.add("is-invalid");
+          input.classList.remove("is-valid");
+          isValid = false;
+        } else {
+          input.classList.remove("is-invalid");
+          input.classList.add("is-valid");
+          errorElement.textContent = "";
+        }
+      }
+
+      validateInput(
+        "title",
+        document.getElementById("title").value.trim().length >= 3,
+        "Title must be at least 3 characters."
+      );
+      validateInput(
+        "description",
+        document.getElementById("description").value.trim().length >= 10,
+        "Description must be at least 10 characters."
+      );
+
+      const imageInput = document.getElementById("imageUrl");
+      validateInput(
+        "imageUrl",
+        imageInput.files.length > 0,
+        "Please upload an image file."
+      );
+
+      const price = Number(document.getElementById("price").value);
+      validateInput(
+        "price",
+        !isNaN(price) && price > 0,
+        "Price must be a positive number."
+      );
+
+      validateInput(
+        "location",
+        document.getElementById("location").value.trim() !== "",
+        "Location cannot be empty."
+      );
+      validateInput(
+        "country",
+        document.getElementById("country").value.trim() !== "",
+        "Country cannot be empty."
+      );
+
+      if (!isValid) {
+        event.preventDefault();
+      }
+    });
+</script>

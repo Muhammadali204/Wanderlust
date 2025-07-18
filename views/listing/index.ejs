@@ -1,0 +1,113 @@
+<% layout("layouts/boilerplate"); %>
+
+<!-- Icons Section -->
+<!-- Icons Section -->
+<div class="container my-4">
+  <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-7 g-3 text-center">
+    <div class="col">
+      <a href="/listings?category=Home" class="text-decoration-none text-dark">
+        <div class="border rounded p-3 bg-light">
+          <i class="fas fa-home fa-2x text-primary mb-2"></i>
+          <p class="mb-0">Home</p>
+        </div>
+      </a>
+    </div>
+    <div class="col">
+      <a href="/listings?category=Beach" class="text-decoration-none text-dark">
+        <div class="border rounded p-3 bg-light">
+          <i class="fas fa-umbrella-beach fa-2x text-info mb-2"></i>
+          <p class="mb-0">Beach</p>
+        </div>
+      </a>
+    </div>
+    <div class="col">
+      <a href="/listings?category=City" class="text-decoration-none text-dark">
+        <div class="border rounded p-3 bg-light">
+          <i class="fas fa-city fa-2x text-secondary mb-2"></i>
+          <p class="mb-0">City</p>
+        </div>
+      </a>
+    </div>
+    <div class="col">
+      <a href="/listings?category=Mountains" class="text-decoration-none text-dark">
+        <div class="border rounded p-3 bg-light">
+          <i class="fas fa-mountain fa-2x text-warning mb-2"></i>
+          <p class="mb-0">Mountains</p>
+        </div>
+      </a>
+    </div>
+    <!-- <div class="col">
+      <a href="/listings?category=Forest" class="text-decoration-none text-dark">
+        <div class="border rounded p-3 bg-light">
+          <i class="fas fa-tree fa-2x text-success mb-2"></i>
+          <p class="mb-0">Forest</p>
+        </div>
+      </a>
+    </div>
+    <div class="col">
+      <a href="/listings?category=Winter" class="text-decoration-none text-dark">
+        <div class="border rounded p-3 bg-light">
+          <i class="fas fa-snowflake fa-2x text-info mb-2"></i>
+          <p class="mb-0">Winter</p>
+        </div>
+      </a>
+    </div>
+    <div class="col">
+      <a href="/listings?category=Hotel" class="text-decoration-none text-dark">
+        <div class="border rounded p-3 bg-light">
+          <i class="fas fa-hotel fa-2x text-danger mb-2"></i>
+          <p class="mb-0">Hotel</p>
+        </div> -->
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Tax Toggle Switch -->
+<div class="container mb-3 d-flex justify-content-end">
+  <div class="form-check form-switch">
+    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked />
+    <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+  </div>
+</div>
+
+<!-- Listings Section -->
+<div class="container">
+  <div class="row g-4">
+    <% try { %>
+      <% allListings.forEach(listing => { %>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card h-100 shadow-sm">
+            <img 
+              src="<%= listing.image?.url || '/images/fallback.jpg' %>" 
+              class="card-img-top" 
+              alt="listing_image"
+              style="height: 200px; object-fit: cover;"
+            />
+            <div class="card-body">
+              <h5 class="card-title"><%= listing.title %></h5>
+              <p class="card-text text-muted"><%= listing.description %></p>
+              <p class="card-text">
+                <strong>$<%= listing.price %></strong> 
+                <span class="text-muted tax-info ms-2">+18% GST</span>
+              </p>
+              <a href="/listings/<%= listing._id %>" class="btn btn-outline-dark btn-sm">View</a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    <% } catch (err) { %>
+      <div class="alert alert-danger">Error loading listings: <%= err.message %></div>
+    <% } %>
+  </div>
+</div>
+
+<!-- Tax Toggle Script -->
+<script>
+  document.getElementById("flexSwitchCheckDefault").addEventListener("change", function () {
+    const taxInfos = document.querySelectorAll(".tax-info");
+    taxInfos.forEach(el => {
+      el.style.display = this.checked ? "inline" : "none";
+    });
+  });
+</script>

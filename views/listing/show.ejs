@@ -1,0 +1,123 @@
+<%- layout("layouts/boilerplate") %>
+
+<div class="container my-5">
+  <div class="row g-4">
+    <!-- Listing Card -->
+    <div class="col-12 col-md-6">
+      <div class="card shadow">
+        <img src="<%= listing.image?.url || '/images/default.jpg' %>" class="card-img-top" alt="listing_image" style="height: 300px; object-fit: cover;" />
+        <div class="card-body">
+          <h3 class="card-title"><%= listing.title %></h3>
+          <p class="card-text"><%= listing.description %></p>
+          <h5 class="text-primary">$<%= listing.price %></h5>
+          <p class="text-muted mb-2">
+            Listed by <strong><%= listing.owner?.username || "Unknown" %></strong>
+          </p>
+
+          <% if (
+            currentUser &&
+            listing.owner &&
+            currentUser._id.toString() === listing.owner._id.toString()
+          ) { %>
+            <div class="d-flex gap-2">
+              <form action="/listings/<%= listing._id %>/edit" method="get">
+                <button class="btn btn-outline-success btn-sm">Edit</button>
+              </form>
+              <form action="/listings/<%= listing._id %>?_method=DELETE" method="post">
+                <button class="btn btn-outline-danger btn-sm">Delete</button>
+              </form>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Section -->
+    <div class="col-12 col-md-6">
+      <!-- Add Review Form -->
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <h4 class="card-title">Leave a Review</h4>
+          <% if (currentUser) { %>
+            <form action="/listings/<%= listing._id %>/reviews" method="POST">
+              <div class="mb-3">
+                <textarea name="review[comment]" class="form-control" rows="3" placeholder="Write your review..." required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="rating" class="form-label">Rating:</label>
+                <select name="review[rating]" class="form-select" required>
+                  <option value="5">★★★★★</option>
+                  <option value="4">★★★★☆</option>
+                  <option value="3">★★★☆☆</option>
+                  <option value="2">★★☆☆☆</option>
+                  <option value="1">★☆☆☆☆</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-success">Submit Review</button>
+            </form>
+          <% } else { %>
+            <p class="text-muted"><a href="/login">Log in</a> to leave a review.</p>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Display Reviews -->
+      <div class="card shadow">
+        <div class="card-body">
+          <h4 class="card-title">Reviews</h4>
+          <% if (listing.reviews?.length > 0) { %>
+            <% listing.reviews.forEach(review => { %>
+              <div class="border-bottom pb-2 mb-2">
+                <p class="mb-1"><strong><%= review.author?.username || "Unknown" %></strong> - <%= review.rating %>/5</p>
+                <p class="mb-1"><%= review.comment %></p>
+                <% if (
+                  currentUser &&
+                  review.author &&
+                  currentUser._id.toString() === review.author._id.toString()
+                ) { %>
+                  <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="d-inline">
+                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                  </form>
+                <% } %>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p class="text-muted">No reviews yet. Be the first to review!</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map Section -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <h4 class="mb-3">Location Map</h4>
+      <div id="map" class="border" style="height: 400px; width: 100%;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const lat = parseFloat("<%= listing.latitude || 51.505 %>");
+    const lng = parseFloat("<%= listing.longitude || -0.09 %>");
+
+    if (isNaN(lat) || isNaN(lng)) {
+      console.error("Invalid coordinates");
+      return;
+    }
+
+    const map = L.map("map").setView([lat, lng], 13);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+
+    L.marker([lat, lng])
+      .addTo(map)
+      .bindPopup(`<b><%= listing.title %></b><br><%= listing.location %>`)
+      .openPopup();
+  });
+  
+</script>

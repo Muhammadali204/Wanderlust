@@ -1,0 +1,84 @@
+.mainDiv {
+    padding-top: 4rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px; /* Space between cards */
+    margin: 0 auto;
+    max-width: 1200px; /* Optional: Center the layout */
+  }
+  
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* Ensure cards have equal height */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+
+.card:hover {
+    transform: translateY(-5px); /* Slight upward movement */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Adds a shadow for depth */
+  }
+  
+  .card img {
+    width: 100%; /* Stretch image to card width */
+    height: 200px; /* Set consistent height */
+    object-fit: cover; /* Maintain image aspect ratio */
+    border-bottom: 1px solid #ddd;
+  }
+  .mainDiv a {
+    text-decoration: none; /* Removes underline */
+    color: inherit; /* Inherits the text color */
+    transition: color 0.3s ease; /* Adds a smooth hover effect for color changes */
+  }
+  
+  .mainDiv a:hover {
+    color: #ff5722; /* Changes color on hover */
+    text-decoration: none; /* Ensures no underline appears on hover */
+  }
+  
+  
+  .card-body {
+    padding: 16px;
+    flex-grow: 1; /* Ensures the body takes remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .card-text {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  .card-text b {
+    font-size: 16px;
+    color: #000;
+  }
+  
+  .price {
+    color: #ff5722;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 768px) {
+    .mainDiv {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns for medium screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .mainDiv {
+      grid-template-columns: 1fr; /* 1 column for small screens */
+    }
+  }
+  
+
+  
